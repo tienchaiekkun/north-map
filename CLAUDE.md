@@ -1,0 +1,36 @@
+# แผนที่จัดสายส่งภาคเหนือ (north-map)
+
+Single-file Leaflet map for planning delivery runs by อำเภอ across northern Thailand. No backend.
+
+## Layout
+- `src/index.template.html` — the app (HTML/CSS/JS). Placeholders: `__LEAFLET_CSS__`, `__DATA__`, `__PROV__`, `__ROADS__`.
+- `src/leaflet.css` — Leaflet 1.9.4 CSS (inlined at build). Leaflet JS is loaded from cdnjs.
+- `data/districts.json` — 112 อำเภอ, 9 provinces (50 51 52 54 55 56 57 58 64). props: c=amp_code th en p=pro_code.
+- `data/provinces.json` — dissolved province polygons (for boundary + labels + road dimming).
+- `data/roads.json` — `[{r:ref, h:class, g:[[ [lat,lon],... ], ...]}]`; class m/t/p/s/r = motorway/trunk/primary/secondary/tertiary.
+- `data/raw/` — source pulls (district GeoJSON for all 17 northern provinces; road TSVs from Overpass).
+- `scripts/build.py` → writes `index.html` (≈1.45 MB). **Always rebuild after editing template or data.**
+- `scripts/make_data.py` → regenerates the three data JSONs from `data/raw/` (needs `mapshaper`).
+- `scripts/fetch_roads_overpass.js` → browser snippet to pull roads for a new province.
+
+## Data sources
+- Districts: Royal Thai Survey Dept via github.com/chingchai/OpenGISData-Thailand (`districts.geojson`, 928 อำเภอ). Verified counts match official.
+- Roads: OpenStreetMap via Overpass (2026-09-25). Points thinned to 150 m (trunk/primary), 300 m (secondary), 600 m (tertiary), 4 dp.
+- Basemaps (optional, need internet): Esri World Street Map / World Imagery. `พื้นเรียบ` mode is fully offline. Do NOT use tile.openstreetmap.org (blocks file:// / no-referer) or CARTO (needs API key now).
+
+## Adding a province
+1. Add its pro_code to `PROVS` in `scripts/make_data.py`.
+2. Pull roads with `scripts/fetch_roads_overpass.js` (set `ISO`), save as `data/raw/roads_<name>.tsv`.
+3. Add code/name/hue to `PROV`, `ORDER`, `PH` in the template.
+4. `python3 scripts/make_data.py && python3 scripts/build.py`.
+
+## UI conventions
+- Province chips = multi-select toggles; `ทุกจังหวัด` / `ล้าง`.
+- Roads: 3 levels (หลัก / +สายรอง / ทั้งหมด). Road numbers: ไม่มี / สายหลัก / ทุกสาย. Roads outside selected provinces are dimmed.
+- District borders white, province border dotted navy, roads solid red/orange/brown/grey — keep these distinct.
+- Labels: district names always on (zoom-dependent size); road shields rendered per viewport with overlap culling.
+- State (selected provinces, road level, basemap) persisted in localStorage `nmap3`.
+- Must work at 390 px width; viewport meta is required.
+
+## Deploy
+GitHub Pages from repo root (`index.html`). Rebuild + commit `index.html` (it is a build artifact but is committed so Pages needs no CI).

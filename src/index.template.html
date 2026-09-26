@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#FFFFFF">
+<title>แผนที่จัดสายส่งภาคเหนือ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap">
+<style>
+__LEAFLET_CSS__
+:root{ --paper:#F4F5F0; --panel:#FFFFFF; --ink:#1E2A32; --muted:#5E6B74; --line:#D8DDD9; --accent:#C4302B;
+  --chip:#EEF0EC; --chip-on:#1E2A32; --chip-on-ink:#FFFFFF; --shadow:0 2px 10px rgba(20,30,40,.14); }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark; --paper:#141A1F; --panel:#1C242B; --ink:#E8ECEA; --muted:#9AA6AE; --line:#2F3A42; --chip:#26313A; --chip-on:#E8ECEA; --chip-on-ink:#141A1F; }}
+:root[data-theme="dark"]{ color-scheme:dark; --paper:#141A1F; --panel:#1C242B; --ink:#E8ECEA; --muted:#9AA6AE; --line:#2F3A42; --chip:#26313A; --chip-on:#E8ECEA; --chip-on-ink:#141A1F; }
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Sarabun",-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;display:flex;flex-direction:column;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:8px 16px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1000}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h1{font-size:16px;font-weight:700;margin:0;white-space:nowrap}
+.search{position:relative;flex:1;min-width:160px;max-width:320px}
+.search input{width:100%;box-sizing:border-box;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px}
+.search ul{position:absolute;left:0;right:0;top:100%;margin:4px 0 0;padding:4px 0;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);max-height:260px;overflow:auto;z-index:1200}
+.search li{padding:7px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.search li small{color:var(--muted)}
+.search li:hover,.search li.hi{background:var(--chip)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin;align-items:center}
+.chip,.qb{padding:5px 11px;border-radius:999px;background:var(--chip);font-weight:500;font-size:13px;white-space:nowrap;line-height:1.3;display:inline-flex;align-items:center;gap:5px}
+.chip:hover,.qb:hover{filter:brightness(.94)}
+.chip.on{background:var(--chip-on);color:var(--chip-on-ink)}
+.chip .n{opacity:.7;font-size:12px}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--sw);display:inline-block}
+.sep{width:1px;height:22px;background:var(--line);flex:none;margin:0 4px}
+.seg{display:inline-flex;background:var(--chip);border-radius:999px;padding:2px;flex:none}
+.seg button{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.seglbl{font-size:12px;color:var(--muted);flex:none;margin-left:4px}
+main{flex:1;min-height:0;position:relative}
+#map{position:absolute;inset:0;background:#EDEBE3}
+.base{position:absolute;top:10px;right:10px;z-index:800;display:flex;background:var(--panel);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.base button{padding:6px 10px;font-size:12px;font-weight:600;color:var(--muted)}
+.base button.on{background:var(--ink);color:var(--paper)}
+.legend{position:absolute;left:10px;bottom:22px;z-index:800;background:rgba(255,255,255,.92);border-radius:10px;box-shadow:var(--shadow);padding:8px 12px;font-size:12px;color:#1E2A32;display:grid;grid-template-columns:auto auto;gap:4px 8px;align-items:center}
+.legend i{display:inline-block;width:26px;height:0;border-top:4px solid #C4302B;border-radius:2px}
+.legend i.p{border-top:3px solid #E0562F}.legend i.s{border-top:2px solid #8C6B2E}.legend i.r{border-top:1.5px solid #A79C86}
+.legend i.b{border-top:3px dotted #2B3A67}
+.legend i.d{border-top:2px solid #fff;box-shadow:0 0 0 1px #ccc}
+.leaflet-container{font-family:inherit}
+.dl{background:transparent;border:0;box-shadow:none;color:#1E2A32;font-weight:700;font-size:12px;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 5px #fff,0 0 7px #fff;pointer-events:none;padding:0;white-space:nowrap;line-height:1.1;letter-spacing:.01em}
+.dl.sel{color:#8A2A00}
+.pl{background:transparent;border:0;box-shadow:none;color:#5E4A2A;font-weight:700;font-size:15px;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 4px #fff,0 0 6px #fff;pointer-events:none;opacity:.75;white-space:nowrap}
+.rl{background:#fff;border:1.5px solid #C4302B;color:#C4302B;border-radius:4px;padding:0 4px;font-weight:700;font-size:11px;box-shadow:0 1px 2px rgba(0,0,0,.2);pointer-events:none;line-height:1.4;font-family:"Sarabun",sans-serif;white-space:nowrap}
+.rl.p{border-color:#E0562F;color:#B5391B}
+.rl.s{border-color:#8C6B2E;color:#6B4F1E;font-size:10px;border-width:1px}
+.rl.r{border-color:#A79C86;color:#6E6452;font-size:9px;border-width:1px;background:#FBF9F4}
+.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{display:none}
+.leaflet-control-attribution{font-size:9px}
+.info{position:absolute;right:10px;bottom:22px;z-index:800;background:var(--panel);border-radius:10px;box-shadow:var(--shadow);padding:8px 12px;font-size:13px;max-width:260px;display:none}
+.info.show{display:block}
+.info b{font-size:15px}
+.info small{color:var(--muted);display:block}
+@media (max-width:760px){ .legend{display:none} .info{left:10px;right:10px;max-width:none;bottom:14px}
+  header{padding:6px 12px;gap:6px} h1{font-size:14px} .search{max-width:none;min-width:120px}
+  .row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .seglbl{display:none}
+  .chip,.qb{padding:4px 9px;font-size:12px} .base{top:8px;right:8px} .base button{padding:5px 8px;font-size:11px}
+  .leaflet-control-zoom{display:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="row">
+    <h1>แผนที่จัดสายส่งภาคเหนือ</h1>
+    <div class="search"><input id="q" type="search" placeholder="ค้นหาอำเภอ… เช่น แม่วาง" autocomplete="off"><ul id="sug" hidden></ul></div>
+    <span class="seglbl">ถนน</span>
+    <div class="seg" id="roadSeg">
+      <button data-l="1">หลัก</button><button data-l="2">+สายรอง</button><button data-l="3" class="on">ทั้งหมด</button>
+    </div>
+    <span class="seglbl">เลขสาย</span>
+    <div class="seg" id="lblSeg">
+      <button data-l="0">ไม่มี</button><button data-l="1" class="on">สายหลัก</button><button data-l="2">ทุกสาย</button>
+    </div>
+  </div>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main>
+  <div id="map"></div>
+  <div class="base" id="base">
+    <button data-b="none" class="on">พื้นเรียบ</button>
+    <button data-b="street">ถนน Esri</button>
+    <button data-b="sat">ดาวเทียม</button>
+  </div>
+  <div class="legend">
+    <i></i><span>ทางหลวงสายหลัก (1, 11, 101, 118…)</span>
+    <i class="p"></i><span>ทางหลวง 3 หลัก (103, 107, 108…)</span>
+    <i class="s"></i><span>ทางหลวง 4 หลัก (1013, 1020…)</span>
+    <i class="r"></i><span>ทางหลวงชนบท (ชม.xxxx) — ซูมเข้า</span>
+    <i class="b"></i><span>เขตจังหวัด</span>
+    <i class="d"></i><span>เขตอำเภอ</span>
+  </div>
+  <div class="info" id="info"></div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const DATA = __DATA__;
+const PROVGEO = __PROV__;
+const ROADS = __ROADS__;
+const PROV = {'50':'เชียงใหม่','51':'ลำพูน','52':'ลำปาง','54':'แพร่','55':'น่าน','56':'พะเยา','57':'เชียงราย','58':'แม่ฮ่องสอน','64':'สุโขทัย'};
+const ORDER = ['50','57','56','55','54','52','51','58','64'];
+// province hue family, districts vary within it -> distinct but readable
+const PH = {'50':205,'57':350,'56':45,'55':95,'54':25,'52':275,'51':170,'58':320,'64':140};
+const COLOR = {};
+(()=>{ const idx={}; DATA.features.forEach(f=>{ const p=f.properties.p; const i=(idx[p]=(idx[p]||0)+1);
+  const h=PH[p]+((i*47)%5-2)*9, s=55+((i*3)%3)*10, l=72+((i*5)%4)*4; COLOR[f.properties.c]=`hsl(${h} ${s}% ${l}%)`; }); })();
+
+let active=new Set(ORDER), roadLevel=3, lblLevel=1, currentBase='none', selected=null;
+try{ const s=JSON.parse(localStorage.getItem('nmap3')||'{}'); if(s.active) active=new Set(s.active); if(s.base) currentBase=s.base; if(s.roadLevel) roadLevel=s.roadLevel; if(s.lblLevel!=null) lblLevel=s.lblLevel; }catch(e){}
+function save(){ try{ localStorage.setItem('nmap3',JSON.stringify({active:[...active],base:currentBase,roadLevel,lblLevel})); }catch(e){} }
+
+const canvas = L.canvas({padding:0.5});
+const map = L.map('map',{zoomControl:true,renderer:canvas,preferCanvas:true}).setView([18.9,99.6],8);
+const bases = {
+  none: L.layerGroup(),
+  street: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'© Esri, HERE, Garmin, OpenStreetMap'}),
+  sat: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'© Esri'})
+};
+if(!bases[currentBase]) currentBase='none';
+bases[currentBase].addTo(map);
+document.querySelectorAll('#base button').forEach(b=>{ b.classList.toggle('on',b.dataset.b===currentBase);
+  b.onclick=()=>{ map.removeLayer(bases[currentBase]); currentBase=b.dataset.b; bases[currentBase].addTo(map);
+    document.querySelectorAll('#base button').forEach(x=>x.classList.toggle('on',x===b)); styleAll(); save(); }; });
+
+map.createPane('roads'); map.getPane('roads').style.zIndex=450;
+map.createPane('provl'); map.getPane('provl').style.zIndex=460;
+map.createPane('lbl'); map.getPane('lbl').style.zIndex=640; map.getPane('lbl').style.pointerEvents='none';
+
+// ---- districts ----
+const styleOf = f => { const c=f.properties.c, sel=selected===c, sat=currentBase==='sat';
+  return { color: sel?'#8A2A00':'#FFFFFF', weight: sel?3:1.6, opacity: sel?1:.95, fillColor: sel?'#F2A900':COLOR[c], fillOpacity: sel?.55: sat?.2:.38 }; };
+const layerByCode={};
+const geo = L.geoJSON(DATA,{ style:styleOf, onEachFeature:(f,l)=>{ layerByCode[f.properties.c]=l;
+  l.on('click',()=>select(f.properties.c, false)); } });
+const provLayer = L.geoJSON(PROVGEO,{pane:'provl',style:{color:'#2B3A67',weight:3.5,fill:false,dashArray:'1 8',lineCap:'round',opacity:.9,interactive:false}});
+function styleAll(){ geo.eachLayer(l=>l.setStyle(styleOf(l.feature))); }
+// district labels as one marker each (DOM), province labels at low zoom
+const dLabels = L.layerGroup(), pLabels = L.layerGroup();
+DATA.features.forEach(f=>{ const l=layerByCode[f.properties.c]; const c=l.getBounds().getCenter();
+  const m=L.marker(c,{pane:'lbl',interactive:false,icon:L.divIcon({className:'dl',html:f.properties.th,iconSize:null})}); m._code=f.properties.c; m._p=f.properties.p; dLabels.addLayer(m); });
+PROVGEO.features.forEach(f=>{ const c=L.geoJSON(f).getBounds().getCenter(); const m=L.marker(c,{pane:'lbl',interactive:false,icon:L.divIcon({className:'pl',html:PROV[f.properties.p],iconSize:null})}); m._p=f.properties.p; pLabels.addLayer(m); });
+
+function select(code, pan){ selected = (selected===code && !pan) ? null : code; styleAll(); updateLabels();
+  const info=document.getElementById('info');
+  if(selected){ const f=layerByCode[selected].feature.properties; info.innerHTML=`<b>อ.${f.th}</b><small>จ.${PROV[f.p]} · ${f.en}</small>`; info.classList.add('show');
+    if(pan) map.fitBounds(layerByCode[selected].getBounds().pad(0.6)); } else info.classList.remove('show'); }
+
+// ---- roads (canvas) ----
+const RSTYLE = { m:{color:'#B0241F',weight:4.5}, t:{color:'#C4302B',weight:4}, p:{color:'#E0562F',weight:3}, s:{color:'#8C6B2E',weight:1.8}, r:{color:'#A79C86',weight:1.2} };
+const CASE = { m:'#fff', t:'#fff', p:'#fff', s:'#fff', r:null };
+const roadGroups = { t:L.layerGroup(), p:L.layerGroup(), s:L.layerGroup(), r:L.layerGroup() };
+const labelCands = { t:[], p:[], s:[], r:[] };  // {lat,lng,ref,rank}
+function km(a,b){ return Math.hypot((a[0]-b[0])*111,(a[1]-b[1])*105); }
+// point-in-province (ray casting) to dim roads outside selected provinces
+const PROVPOLY = PROVGEO.features.map(f=>({p:f.properties.p, rings: f.geometry.type==='Polygon'? [f.geometry.coordinates[0]] : f.geometry.coordinates.map(pg=>pg[0]), bb:L.geoJSON(f).getBounds()}));
+function pip(lat,lng,ring){ let ins=false; for(let i=0,j=ring.length-1;i<ring.length;j=i++){ const xi=ring[i][1],yi=ring[i][0],xj=ring[j][1],yj=ring[j][0];
+  if(((xi>lat)!==(xj>lat)) && (lng < (yj-yi)*(lat-xi)/(xj-xi)+yi)) ins=!ins; } return ins; }
+function provOf(pt){ for(const pp of PROVPOLY){ if(!pp.bb.contains(pt)) continue; for(const r of pp.rings) if(pip(pt[0],pt[1],r)) return pp.p; } return null; }
+const roadLines = []; // {line, case, prov}
+ROADS.forEach(r=>{ const cls=r.h==='m'?'t':r.h, st=RSTYLE[r.h];
+  r.g.forEach(seg=>{ const mid=seg[Math.floor(seg.length/2)]; const prov=provOf(mid);
+    let cs=null; if(CASE[r.h]){ cs=L.polyline(seg,{pane:'roads',renderer:canvas,color:CASE[r.h],weight:st.weight+2.5,opacity:.9,interactive:false}); }
+    const ln=L.polyline(seg,{pane:'roads',renderer:canvas,color:st.color,weight:st.weight,opacity:1,interactive:false});
+    roadLines.push({line:ln,cs,prov,cls}); });
+  if(!r.r) return;
+  const minD = cls==='t'?10: cls==='p'?9: cls==='s'?7:5; const placed=[]; let n=0;
+  r.g.forEach(seg=>{ for(let i=1;i<seg.length;i+=2){ const pt=seg[i]; if(placed.some(q=>km(q,pt)<minD)) continue; placed.push(pt);
+      labelCands[cls].push({lat:pt[0],lng:pt[1],ref:r.r,rank:n++,prov:provOf(pt)}); } });
+});
+// two passes so casings never paint over neighbouring segments
+roadLines.forEach(o=>{ if(o.cs) roadGroups[o.cls].addLayer(o.cs); });
+roadLines.forEach(o=>roadGroups[o.cls].addLayer(o.line));
+function dimRoads(){ const all = active.size===ORDER.length;
+  roadLines.forEach(o=>{ const on = all || !o.prov || active.has(o.prov); o.line.setStyle({opacity:on?1:.22}); if(o.cs) o.cs.setStyle({opacity:on?.9:.15}); }); }
+const roadLabelLayer = L.layerGroup().addTo(map);
+function renderRoadLabels(){
+  roadLabelLayer.clearLayers();
+  const z=map.getZoom(), b=map.getBounds().pad(0.1);
+  if(!lblLevel) return;
+  const all = lblLevel>=2;
+  const show = { t: z>=8, p: roadLevel>=2 && z>=(all?9:10), s: all && roadLevel>=2 && z>=10, r: all && roadLevel>=3 && z>=12 };
+  const every = { t: z>=11?1: z>=9?2:4, p: z>=11?1: z>=10?2:4, s: z>=12?1: z>=11?2:4, r: z>=14?1: z>=13?2:4 };
+  const seen=[]; const minPx = 40;
+  for(const k of ['t','p','s','r']){ if(!show[k]) continue;
+    const all=active.size===ORDER.length;
+    for(const c of labelCands[k]){ if(c.rank%every[k]) continue; if(!all && c.prov && !active.has(c.prov)) continue; if(!b.contains([c.lat,c.lng])) continue;
+      const px=map.latLngToContainerPoint([c.lat,c.lng]); if(seen.some(q=>Math.abs(q.x-px.x)<minPx && Math.abs(q.y-px.y)<18)) continue; seen.push(px);
+      roadLabelLayer.addLayer(L.marker([c.lat,c.lng],{pane:'lbl',interactive:false,icon:L.divIcon({className:'rl '+(k==='t'?'':k),html:c.ref,iconSize:null})})); } }
+}
+function updateRoads(){ const z=map.getZoom();
+  const want = { t:true, p:roadLevel>=2 || z>=9, s:(roadLevel>=2 && z>=9), r:(roadLevel>=3 && z>=11) };
+  for(const k of ['t','p','s','r']) want[k]?roadGroups[k].addTo(map):map.removeLayer(roadGroups[k]);
+  renderRoadLabels(); }
+document.querySelectorAll('#lblSeg button').forEach(b=>{ b.classList.toggle('on',+b.dataset.l===lblLevel);
+  b.onclick=()=>{ lblLevel=+b.dataset.l; document.querySelectorAll('#lblSeg button').forEach(x=>x.classList.toggle('on',x===b)); renderRoadLabels(); save(); }; });
+document.querySelectorAll('#roadSeg button').forEach(b=>{ b.classList.toggle('on',+b.dataset.l===roadLevel);
+  b.onclick=()=>{ roadLevel=+b.dataset.l; document.querySelectorAll('#roadSeg button').forEach(x=>x.classList.toggle('on',x===b)); updateRoads(); save(); }; });
+
+// ---- labels by zoom ----
+function updateLabels(){ const z=map.getZoom(), few=active.size<=3, minZ = map.getSize().x<760 ? (few?8:9) : (few?7:8), showD = z>=minZ;
+  dLabels.eachLayer(m=>{ const el=m.getElement(); if(!el) return; const on=active.has(m._p) && (showD || m._code===selected);
+    el.style.display = on ? '' : 'none'; el.classList.toggle('sel', m._code===selected);
+    el.style.fontSize = z>=12?'16px': z>=10?'14px': z>=9?'12.5px':'11px'; });
+  pLabels.eachLayer(m=>{ const el=m.getElement(); if(!el) return; el.style.display = (active.has(m._p) && !showD) ? '' : 'none'; el.style.fontSize = z>=8?'14px':'12px'; });
+}
+map.on('zoomend',()=>{updateLabels();updateRoads();}); map.on('moveend',renderRoadLabels);
+
+// ---- province chips ----
+function render(){ geo.eachLayer(l=>{ const show=active.has(l.feature.properties.p);
+    if(show && !map.hasLayer(l)) map.addLayer(l); if(!show && map.hasLayer(l)) map.removeLayer(l); });
+  updateLabels(); dimRoads(); renderRoadLabels(); document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',active.has(c.dataset.p))); save(); }
+function fitActive(){ const ls=[]; geo.eachLayer(l=>{ if(active.has(l.feature.properties.p)) ls.push(l); });
+  if(ls.length) map.fitBounds(L.featureGroup(ls).getBounds().pad(0.02)); }
+const chips=document.getElementById('chips');
+const qa=document.createElement('button'); qa.className='qb'; qa.textContent='ทุกจังหวัด'; qa.onclick=()=>{active=new Set(ORDER);render();fitActive();}; chips.appendChild(qa);
+const sp=document.createElement('span'); sp.className='sep'; chips.appendChild(sp);
+ORDER.forEach(code=>{ const b=document.createElement('button'); b.className='chip'; b.dataset.p=code;
+  b.innerHTML=`<i style="--sw:hsl(${PH[code]} 60% 62%)"></i>${PROV[code]}<span class="n">${DATA.features.filter(f=>f.properties.p===code).length}</span>`;
+  b.onclick=()=>{ active.has(code)?active.delete(code):active.add(code); render(); fitActive(); }; chips.appendChild(b); });
+const qn=document.createElement('button'); qn.className='qb'; qn.textContent='ล้าง'; qn.onclick=()=>{active=new Set();render();}; chips.appendChild(qn);
+
+// ---- search ----
+const q=document.getElementById('q'), sug=document.getElementById('sug'); let hi=-1, hits=[];
+function norm(s){ return s.toLowerCase().replace(/^อ\.?\s*/,'').replace(/^อำเภอ\s*/,''); }
+q.oninput=()=>{ const v=norm(q.value.trim()); hi=-1; if(!v){ sug.hidden=true; return; }
+  hits=DATA.features.filter(f=>f.properties.th.includes(v)||f.properties.en.toLowerCase().includes(v)).slice(0,8);
+  sug.innerHTML=hits.map((f,i)=>`<li data-i="${i}">อ.${f.properties.th}<small>จ.${PROV[f.properties.p]}</small></li>`).join(''); sug.hidden=!hits.length;
+  sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{ e.preventDefault(); pick(hits[+li.dataset.i]); }); };
+function pick(f){ q.value='อ.'+f.properties.th; sug.hidden=true; if(!active.has(f.properties.p)){ active.add(f.properties.p); render(); } select(f.properties.c,true); }
+q.onkeydown=e=>{ if(sug.hidden) return; if(e.key==='ArrowDown'){hi=Math.min(hi+1,hits.length-1);} else if(e.key==='ArrowUp'){hi=Math.max(hi-1,0);} else if(e.key==='Enter'){ if(hits[hi<0?0:hi]) pick(hits[hi<0?0:hi]); return; } else if(e.key==='Escape'){ sug.hidden=true; return; } else return;
+  e.preventDefault(); sug.querySelectorAll('li').forEach((li,i)=>li.classList.toggle('hi',i===hi)); };
+q.onblur=()=>setTimeout(()=>sug.hidden=true,150);
+
+geo.addTo(map); provLayer.addTo(map); dLabels.addTo(map); pLabels.addTo(map); render(); updateRoads(); fitActive();
+</script>
+</body>
+</html>
