@@ -25,8 +25,9 @@ Single-file Leaflet map for planning delivery runs by อำเภอ across nor
 4. `python3 scripts/make_data.py && node scripts/build.js`.
 
 ## UI conventions
+- Header = ☰ button + title + road/label segs. ☰ opens a drawer (`#drawer`, overlays the map) holding the district search and province chips; badge on ☰ shows the active-province count when not all are selected. Drawer closes on district pick or when the user touches the map (not on programmatic zoom, so chip toggles keep it open).
 - Province chips = multi-select toggles; `ทุกจังหวัด` / `ล้าง`.
-- Roads: 3 levels (หลัก / +สายรอง / ทั้งหมด). Road numbers: ไม่มี / สายหลัก / ทุกสาย. Roads outside selected provinces are dimmed.
+- Roads: 3 levels (หลัก / +สายรอง / ทั้งหมด), default `+สายรอง`. Road numbers: ไม่มี / สายหลัก / ทุกสาย, default `ไม่มี`. Roads outside selected provinces are dimmed.
 - District borders white, province border dotted navy, roads solid red/orange/brown/grey — keep these distinct.
 - Labels: district names always on (zoom-dependent size); road shields rendered per viewport with overlap culling.
 - State (selected provinces, road level, basemap) persisted in localStorage `nmap3`.

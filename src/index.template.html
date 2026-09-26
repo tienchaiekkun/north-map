@@ -17,10 +17,20 @@ html,body{height:100%;margin:0}
 body{background:var(--paper);color:var(--ink);font-family:"Sarabun",-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;display:flex;flex-direction:column;overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-header{background:var(--panel);border-bottom:1px solid var(--line);padding:8px 16px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1000}
-.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-h1{font-size:16px;font-weight:700;margin:0;white-space:nowrap}
-.search{position:relative;flex:1;min-width:160px;max-width:320px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:8px 16px;display:flex;align-items:center;gap:10px;position:relative;z-index:1000}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
+h1{font-size:16px;font-weight:700;margin:0;white-space:nowrap;margin-right:auto}
+.mb{width:36px;height:36px;border-radius:9px;background:var(--chip);display:inline-flex;align-items:center;justify-content:center;flex:none;position:relative}
+.mb svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;fill:none}
+.mb.on{background:var(--chip-on);color:var(--chip-on-ink)}
+.mb .bd:empty{display:none}
+.mb .bd{position:absolute;top:-5px;right:-6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:0 5px;line-height:15px;min-width:15px;text-align:center;box-sizing:border-box}
+.drawer{display:none;position:absolute;top:0;left:0;right:0;z-index:1001;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 16px 14px;flex-direction:column;gap:10px}
+.drawer.open{display:flex}
+.dh{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-weight:600}
+.dh .x{margin-left:auto;width:28px;height:28px;border-radius:50%;background:var(--chip);font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+.drawer .chips{flex-wrap:wrap;overflow:visible;gap:8px}
+.search{position:relative;flex:1;min-width:160px;max-width:420px}
 .search input{width:100%;box-sizing:border-box;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px}
 .search ul{position:absolute;left:0;right:0;top:100%;margin:4px 0 0;padding:4px 0;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);max-height:260px;overflow:auto;z-index:1200}
 .search li{padding:7px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
@@ -62,31 +72,35 @@ main{flex:1;min-height:0;position:relative}
 .info b{font-size:15px}
 .info small{color:var(--muted);display:block}
 @media (max-width:760px){ .legend{display:none} .info{left:10px;right:10px;max-width:none;bottom:14px}
-  header{padding:6px 12px;gap:6px} h1{font-size:14px} .search{max-width:none;min-width:120px}
-  .row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .seglbl{display:none}
+  header{padding:6px 10px;gap:8px} h1{display:none} .search{max-width:none;min-width:120px}
+  .row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .seglbl{display:none} .drawer{padding:10px 12px 12px}
   .chip,.qb{padding:4px 9px;font-size:12px} .base{top:8px;right:8px} .base button{padding:5px 8px;font-size:11px}
   .leaflet-control-zoom{display:none} }
 </style>
 </head>
 <body>
 <header>
+  <button class="mb" id="menu" aria-label="ค้นหา / เลือกจังหวัด" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="bd" id="mbn"></span></button>
   <div class="row">
     <h1>แผนที่จัดสายส่งภาคเหนือ</h1>
-    <div class="search"><input id="q" type="search" placeholder="ค้นหาอำเภอ… เช่น แม่วาง" autocomplete="off"><ul id="sug" hidden></ul></div>
     <span class="seglbl">ถนน</span>
     <div class="seg" id="roadSeg">
-      <button data-l="1">หลัก</button><button data-l="2">+สายรอง</button><button data-l="3" class="on">ทั้งหมด</button>
+      <button data-l="1">หลัก</button><button data-l="2" class="on">+สายรอง</button><button data-l="3">ทั้งหมด</button>
     </div>
     <span class="seglbl">เลขสาย</span>
     <div class="seg" id="lblSeg">
-      <button data-l="0">ไม่มี</button><button data-l="1" class="on">สายหลัก</button><button data-l="2">ทุกสาย</button>
+      <button data-l="0" class="on">ไม่มี</button><button data-l="1">สายหลัก</button><button data-l="2">ทุกสาย</button>
     </div>
   </div>
-  <div class="chips" id="chips"></div>
 </header>
 
 <main>
   <div id="map"></div>
+  <div class="drawer" id="drawer">
+    <div class="dh">ค้นหาอำเภอ / เลือกจังหวัด<button class="x" id="dclose" aria-label="ปิด">✕</button></div>
+    <div class="search"><input id="q" type="search" placeholder="ค้นหาอำเภอ… เช่น แม่วาง" autocomplete="off"><ul id="sug" hidden></ul></div>
+    <div class="chips" id="chips"></div>
+  </div>
   <div class="base" id="base">
     <button data-b="none" class="on">พื้นเรียบ</button>
     <button data-b="street">ถนน Esri</button>
@@ -116,7 +130,7 @@ const COLOR = {};
 (()=>{ const idx={}; DATA.features.forEach(f=>{ const p=f.properties.p; const i=(idx[p]=(idx[p]||0)+1);
   const h=PH[p]+((i*47)%5-2)*9, s=55+((i*3)%3)*10, l=72+((i*5)%4)*4; COLOR[f.properties.c]=`hsl(${h} ${s}% ${l}%)`; }); })();
 
-let active=new Set(ORDER), roadLevel=3, lblLevel=1, currentBase='none', selected=null;
+let active=new Set(ORDER), roadLevel=2, lblLevel=0, currentBase='none', selected=null;
 try{ const s=JSON.parse(localStorage.getItem('nmap3')||'{}'); if(s.active) active=new Set(s.active); if(s.base) currentBase=s.base; if(s.roadLevel) roadLevel=s.roadLevel; if(s.lblLevel!=null) lblLevel=s.lblLevel; }catch(e){}
 function save(){ try{ localStorage.setItem('nmap3',JSON.stringify({active:[...active],base:currentBase,roadLevel,lblLevel})); }catch(e){} }
 
@@ -219,7 +233,14 @@ map.on('zoomend',()=>{updateLabels();updateRoads();}); map.on('moveend',renderRo
 // ---- province chips ----
 function render(){ geo.eachLayer(l=>{ const show=active.has(l.feature.properties.p);
     if(show && !map.hasLayer(l)) map.addLayer(l); if(!show && map.hasLayer(l)) map.removeLayer(l); });
-  updateLabels(); dimRoads(); renderRoadLabels(); document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',active.has(c.dataset.p))); save(); }
+  updateLabels(); dimRoads(); renderRoadLabels(); document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',active.has(c.dataset.p)));
+  document.getElementById('mbn').textContent = active.size===ORDER.length ? '' : active.size; save(); }
+// ---- drawer (search + province chips) ----
+const drawer=document.getElementById('drawer'), menuBtn=document.getElementById('menu');
+function setDrawer(open){ drawer.classList.toggle('open',open); menuBtn.classList.toggle('on',open); menuBtn.setAttribute('aria-expanded',open); }
+menuBtn.onclick=()=>setDrawer(!drawer.classList.contains('open'));
+document.getElementById('dclose').onclick=()=>setDrawer(false);
+map.on('mousedown click dragstart', ()=>{ if(drawer.classList.contains('open')) setDrawer(false); });
 function fitActive(){ const ls=[]; geo.eachLayer(l=>{ if(active.has(l.feature.properties.p)) ls.push(l); });
   if(ls.length) map.fitBounds(L.featureGroup(ls).getBounds().pad(0.02)); }
 const chips=document.getElementById('chips');
@@ -237,7 +258,7 @@ q.oninput=()=>{ const v=norm(q.value.trim()); hi=-1; if(!v){ sug.hidden=true; re
   hits=DATA.features.filter(f=>f.properties.th.includes(v)||f.properties.en.toLowerCase().includes(v)).slice(0,8);
   sug.innerHTML=hits.map((f,i)=>`<li data-i="${i}">อ.${f.properties.th}<small>จ.${PROV[f.properties.p]}</small></li>`).join(''); sug.hidden=!hits.length;
   sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{ e.preventDefault(); pick(hits[+li.dataset.i]); }); };
-function pick(f){ q.value='อ.'+f.properties.th; sug.hidden=true; if(!active.has(f.properties.p)){ active.add(f.properties.p); render(); } select(f.properties.c,true); }
+function pick(f){ q.value='อ.'+f.properties.th; sug.hidden=true; q.blur(); if(!active.has(f.properties.p)){ active.add(f.properties.p); render(); } setDrawer(false); select(f.properties.c,true); }
 q.onkeydown=e=>{ if(sug.hidden) return; if(e.key==='ArrowDown'){hi=Math.min(hi+1,hits.length-1);} else if(e.key==='ArrowUp'){hi=Math.max(hi-1,0);} else if(e.key==='Enter'){ if(hits[hi<0?0:hi]) pick(hits[hi<0?0:hi]); return; } else if(e.key==='Escape'){ sug.hidden=true; return; } else return;
   e.preventDefault(); sug.querySelectorAll('li').forEach((li,i)=>li.classList.toggle('hi',i===hi)); };
 q.onblur=()=>setTimeout(()=>sug.hidden=true,150);
