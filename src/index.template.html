@@ -67,11 +67,50 @@ main{flex:1;min-height:0;position:relative}
 .rl.r{border-color:#A79C86;color:#6E6452;font-size:9px;border-width:1px;background:#FBF9F4}
 .leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{display:none}
 .leaflet-control-attribution{font-size:9px}
-.info{position:absolute;right:10px;bottom:22px;z-index:800;background:var(--panel);border-radius:10px;box-shadow:var(--shadow);padding:8px 12px;font-size:13px;max-width:260px;display:none}
+.info{position:absolute;right:10px;bottom:22px;z-index:800;background:var(--panel);border-radius:10px;box-shadow:var(--shadow);padding:8px 12px;font-size:13px;max-width:280px;display:none}
 .info.show{display:block}
 .info b{font-size:15px}
 .info small{color:var(--muted);display:block}
-@media (max-width:760px){ .legend{display:none} .info{left:10px;right:10px;max-width:none;bottom:14px}
+.dist{margin-top:6px;padding-top:6px;border-top:1px solid var(--line);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dist select{font:inherit;font-size:12px;color:var(--ink);background:var(--chip);border:0;border-radius:999px;padding:3px 8px;max-width:150px}
+.dist .v{font-weight:700;font-size:14px}
+.dist .t{color:var(--muted);font-size:12px}
+.dist .w{color:var(--accent);font-size:11px}
+.tools{position:absolute;top:50px;right:10px;z-index:800;display:flex;flex-direction:column;gap:6px}
+.tools button{background:var(--panel);border-radius:10px;box-shadow:var(--shadow);padding:6px 10px;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap}
+.tools button.on{background:#1D4ED8;color:#fff}
+.mp{position:absolute;right:10px;bottom:22px;z-index:800;background:var(--panel);border-radius:10px;box-shadow:var(--shadow);padding:8px 12px;font-size:13px;width:300px;max-width:calc(100% - 20px);box-sizing:border-box;display:none}
+.mp.show{display:block}
+.mp .hd{display:flex;align-items:center;gap:6px;font-weight:700;margin-bottom:4px}
+.mp .hd span{flex:1}
+.mp .hd button,.mp .ft button{padding:3px 9px;border-radius:999px;background:var(--chip);font-size:12px;font-weight:600}
+.mp ol{margin:0;padding:0;list-style:none;max-height:38vh;overflow:auto}
+.mp li{display:flex;align-items:center;gap:8px;padding:3px 0}
+.mp li .n{width:18px;height:18px;border-radius:50%;background:#1D4ED8;color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.mp li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp li .leg{font-size:12px;color:var(--muted);white-space:nowrap}
+.mp li .leg b{color:var(--ink)}
+.mp .tot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:4px;padding-top:4px;font-weight:700}
+.mp .hint{color:var(--muted);font-size:12px;padding:4px 0}
+.mp .ft{display:flex;gap:6px;margin-top:6px}
+.wh{background:#1E2A32;color:#fff;border-radius:6px;padding:1px 6px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.35);border:1.5px solid #fff;line-height:1.5}
+.wh:before{content:"🏭 "}
+.wh.sel{background:#1D4ED8}
+.pt{pointer-events:none;width:18px;height:18px;border-radius:50%;background:#1D4ED8;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.whs{border-top:1px solid var(--line);padding-top:8px;display:none;flex-direction:column;gap:6px}
+.whs.show{display:flex}
+.whs .ttl{font-size:12px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:8px}
+.whs .ttl button{margin-left:auto;font-size:12px;color:var(--accent)}
+.whs .it{display:flex;align-items:center;gap:8px;font-size:13px}
+.whs .it .c{color:var(--muted);font-size:11px;font-family:monospace}
+.whs .it .del{margin-left:auto;color:var(--muted);font-size:14px;padding:2px 6px}
+.whs form{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.whs input{font:inherit;font-size:13px;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.whs input.nm{width:140px}.whs input.ll{flex:1;min-width:180px}
+.whs .qb.on{background:#1D4ED8;color:#fff}
+.whs .err{color:var(--accent);font-size:12px;width:100%}
+.picking #map{cursor:crosshair}
+@media (max-width:760px){ .legend{display:none} .info{left:10px;right:10px;max-width:none;bottom:14px} .mp{left:10px;right:10px;width:auto;max-width:none;bottom:14px} .tools{top:46px;right:8px}
   header{padding:6px 10px;gap:8px} h1{display:none} .search{max-width:none;min-width:120px}
   .row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .seglbl{display:none} .drawer{padding:10px 12px 12px}
   .chip,.qb{padding:4px 9px;font-size:12px} .base{top:8px;right:8px} .base button{padding:5px 8px;font-size:11px}
@@ -100,6 +139,18 @@ main{flex:1;min-height:0;position:relative}
     <div class="dh">ค้นหาอำเภอ / เลือกจังหวัด<button class="x" id="dclose" aria-label="ปิด">✕</button></div>
     <div class="search"><input id="q" type="search" placeholder="ค้นหาอำเภอ… เช่น แม่วาง" autocomplete="off"><ul id="sug" hidden></ul></div>
     <div class="chips" id="chips"></div>
+    <div class="dh" style="margin-top:2px"><button class="qb" id="whtoggle">⚙️ โกดัง</button></div>
+    <div class="whs" id="whs">
+      <div class="ttl">โกดัง / สาขา (ใช้เป็นจุดเริ่มคิดระยะทาง)<button id="whreset">คืนค่าเริ่มต้น</button></div>
+      <div id="whlist"></div>
+      <form id="whform" autocomplete="off">
+        <input class="nm" id="whname" placeholder="ชื่อโกดัง">
+        <input class="ll" id="whll" placeholder="วางลิงก์ Google Maps หรือ lat,lng">
+        <button type="button" class="qb" id="whpick">📍 แตะบนแผนที่</button>
+        <button type="submit" class="qb">เพิ่ม</button>
+        <div class="err" id="wherr"></div>
+      </form>
+    </div>
   </div>
   <div class="base" id="base">
     <button data-b="none" class="on">พื้นเรียบ</button>
@@ -114,7 +165,14 @@ main{flex:1;min-height:0;position:relative}
     <i class="b"></i><span>เขตจังหวัด</span>
     <i class="d"></i><span>เขตอำเภอ</span>
   </div>
+  <div class="tools"><button id="mbtn" title="วัดระยะทางถนน">📏 วัดระยะ</button></div>
   <div class="info" id="info"></div>
+  <div class="mp" id="mp">
+    <div class="hd"><span>📏 วัดระยะ</span><button id="mundo">↩ ถอย</button><button id="mclear">ล้าง</button><button id="mclose">✕</button></div>
+    <ol id="mlist"></ol>
+    <div class="hint" id="mhint">แตะโกดัง 🏭 หรืออำเภอ (หรือค้นหา) เพื่อเริ่ม แล้วแตะจุดถัดไปต่อกันได้เรื่อย ๆ</div>
+    <div class="tot" id="mtot" style="display:none"><span>รวม</span><span id="mtotv"></span></div>
+  </div>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -122,6 +180,12 @@ main{flex:1;min-height:0;position:relative}
 const DATA = __DATA__;
 const PROVGEO = __PROV__;
 const ROADS = __ROADS__;
+const CENTERS = __CENTERS__;   // amp_code -> [lat,lon] (ที่ว่าการอำเภอ / ตัวอำเภอ)
+const WH_DEFAULT = [
+  { id:'cm',  name:'สาขาเชียงใหม่',          lat:18.731349, lng:99.038084 },
+  { id:'pr',  name:'สาขาแพร่',               lat:18.135570, lng:100.135093 },
+  { id:'cr2', name:'ดอยสะเก็น เชียงราย',      lat:19.905232, lng:99.867576 },
+];
 const PROV = {'50':'เชียงใหม่','51':'ลำพูน','52':'ลำปาง','54':'แพร่','55':'น่าน','56':'พะเยา','57':'เชียงราย','58':'แม่ฮ่องสอน','64':'สุโขทัย'};
 const ORDER = ['50','57','56','55','54','52','51','58','64'];
 // province hue family, districts vary within it -> distinct but readable
@@ -130,9 +194,13 @@ const COLOR = {};
 (()=>{ const idx={}; DATA.features.forEach(f=>{ const p=f.properties.p; const i=(idx[p]=(idx[p]||0)+1);
   const h=PH[p]+((i*47)%5-2)*9, s=55+((i*3)%3)*10, l=72+((i*5)%4)*4; COLOR[f.properties.c]=`hsl(${h} ${s}% ${l}%)`; }); })();
 
-let active=new Set(ORDER), roadLevel=2, lblLevel=0, currentBase='none', selected=null;
-try{ const s=JSON.parse(localStorage.getItem('nmap3')||'{}'); if(s.active) active=new Set(s.active); if(s.base) currentBase=s.base; if(s.roadLevel) roadLevel=s.roadLevel; if(s.lblLevel!=null) lblLevel=s.lblLevel; }catch(e){}
-function save(){ try{ localStorage.setItem('nmap3',JSON.stringify({active:[...active],base:currentBase,roadLevel,lblLevel})); }catch(e){} }
+let active=new Set(ORDER), roadLevel=2, lblLevel=0, currentBase='none', selected=null, whId=WH_DEFAULT[0].id;
+let WH = WH_DEFAULT.map(w=>({...w}));
+try{ const s=JSON.parse(localStorage.getItem('nmap3')||'{}'); if(s.active) active=new Set(s.active); if(s.base) currentBase=s.base; if(s.roadLevel) roadLevel=s.roadLevel; if(s.lblLevel!=null) lblLevel=s.lblLevel; if(s.wh) whId=s.wh;
+  const w=JSON.parse(localStorage.getItem('nmap-wh')||'null'); if(Array.isArray(w)&&w.length) WH=w; }catch(e){}
+if(!WH.some(w=>w.id===whId)) whId=WH[0].id;
+function save(){ try{ localStorage.setItem('nmap3',JSON.stringify({active:[...active],base:currentBase,roadLevel,lblLevel,wh:whId})); }catch(e){} }
+function saveWH(){ try{ localStorage.setItem('nmap-wh',JSON.stringify(WH)); }catch(e){} }
 
 const canvas = L.canvas({padding:0.5});
 const map = L.map('map',{zoomControl:true,renderer:canvas,preferCanvas:true}).setView([18.9,99.6],8);
@@ -156,7 +224,7 @@ const styleOf = f => { const c=f.properties.c, sel=selected===c, sat=currentBase
   return { color: sel?'#8A2A00':'#FFFFFF', weight: sel?3:1.6, opacity: sel?1:.95, fillColor: sel?'#F2A900':COLOR[c], fillOpacity: sel?.55: sat?.2:.38 }; };
 const layerByCode={};
 const geo = L.geoJSON(DATA,{ style:styleOf, onEachFeature:(f,l)=>{ layerByCode[f.properties.c]=l;
-  l.on('click',()=>select(f.properties.c, false)); } });
+  l.on('click',()=>{ if(picking) return; if(measure.on) addPoint(dPoint(f.properties.c)); else select(f.properties.c, false); }); } });
 const provLayer = L.geoJSON(PROVGEO,{pane:'provl',style:{color:'#2B3A67',weight:3.5,fill:false,dashArray:'1 8',lineCap:'round',opacity:.9,interactive:false}});
 function styleAll(){ geo.eachLayer(l=>l.setStyle(styleOf(l.feature))); }
 // district labels as one marker each (DOM), province labels at low zoom
@@ -165,10 +233,33 @@ DATA.features.forEach(f=>{ const l=layerByCode[f.properties.c]; const c=l.getBou
   const m=L.marker(c,{pane:'lbl',interactive:false,icon:L.divIcon({className:'dl',html:f.properties.th,iconSize:null})}); m._code=f.properties.c; m._p=f.properties.p; dLabels.addLayer(m); });
 PROVGEO.features.forEach(f=>{ const c=L.geoJSON(f).getBounds().getCenter(); const m=L.marker(c,{pane:'lbl',interactive:false,icon:L.divIcon({className:'pl',html:PROV[f.properties.p],iconSize:null})}); m._p=f.properties.p; pLabels.addLayer(m); });
 
+const selPt = L.circleMarker([0,0],{pane:'provl',radius:5,color:'#fff',weight:2,fillColor:'#8A2A00',fillOpacity:1,interactive:false});
 function select(code, pan){ selected = (selected===code && !pan) ? null : code; styleAll(); updateLabels();
   const info=document.getElementById('info');
-  if(selected){ const f=layerByCode[selected].feature.properties; info.innerHTML=`<b>อ.${f.th}</b><small>จ.${PROV[f.p]} · ${f.en}</small>`; info.classList.add('show');
-    if(pan) map.fitBounds(layerByCode[selected].getBounds().pad(0.6)); } else info.classList.remove('show'); }
+  if(selected){ const f=layerByCode[selected].feature.properties;
+    info.innerHTML=`<b>อ.${f.th}</b><small>จ.${PROV[f.p]} · ${f.en}</small><div class="dist" id="dist"></div>`; info.classList.add('show');
+    selPt.setLatLng(CENTERS[selected]).addTo(map); showDist();
+    if(pan) map.fitBounds(layerByCode[selected].getBounds().pad(0.6)); } else { info.classList.remove('show'); map.removeLayer(selPt); } }
+// distance from the chosen warehouse to the selected district (road distance via OSRM)
+let distSeq=0;
+function showDist(){ const el=document.getElementById('dist'); if(!el||!selected) return; const seq=++distSeq;
+  const sel=`<select id="whsel">${WH.map(w=>`<option value="${w.id}"${w.id===whId?' selected':''}>${w.name}</option>`).join('')}</select>`;
+  el.innerHTML=`จาก ${sel} <span class="v">…</span>`;
+  el.querySelector('#whsel').onchange=e=>{ whId=e.target.value; save(); whMarkers(); showDist(); };
+  const w=WH.find(x=>x.id===whId), code=selected;
+  route([w.lat,w.lng], CENTERS[code]).then(r=>{ if(seq!==distSeq||selected!==code) return;
+    el.querySelector('.v').outerHTML=`<span class="v">${fmtKm(r.km)}</span><span class="t">· ${fmtMin(r.min)}</span>${r.approx?'<span class="w">≈ ประมาณจากเส้นตรง (ต่อ OSRM ไม่ได้)</span>':''}`; }); }
+const fmtKm=k=>(k<100?k.toFixed(1):Math.round(k))+' กม.';
+const fmtMin=m=>{ m=Math.round(m); return m<60? m+' น.' : Math.floor(m/60)+' ชม. '+(m%60? (m%60)+' น.':''); };
+const haversine=(a,b)=>{ const R=6371, d=Math.PI/180, dLat=(b[0]-a[0])*d, dLon=(b[1]-a[1])*d; const h=Math.sin(dLat/2)**2+Math.cos(a[0]*d)*Math.cos(b[0]*d)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(h)); };
+const rcache={}; try{ Object.assign(rcache, JSON.parse(localStorage.getItem('nmap-rt')||'{}')); }catch(e){}
+function route(a,b){ const k=a.map(x=>x.toFixed(4)).join(',')+'|'+b.map(x=>x.toFixed(4)).join(',');
+  if(rcache[k]) return Promise.resolve(rcache[k]);
+  const u=`https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson`;
+  return fetch(u).then(r=>r.json()).then(j=>{ if(j.code!=='Ok') throw 0; const rt=j.routes[0];
+      const o={km:rt.distance/1000, min:rt.duration/60, g:rt.geometry.coordinates.map(c=>[+c[1].toFixed(5),+c[0].toFixed(5)])};
+      rcache[k]=o; try{ const ks=Object.keys(rcache); if(ks.length>300) ks.slice(0,ks.length-300).forEach(x=>delete rcache[x]); localStorage.setItem('nmap-rt',JSON.stringify(rcache)); }catch(e){} return o; })
+    .catch(()=>{ const km=haversine(a,b)*1.3; return {km, min:km/50*60, g:[a,b], approx:true}; }); }
 
 // ---- roads (canvas) ----
 const RSTYLE = { m:{color:'#B0241F',weight:4.5}, t:{color:'#C4302B',weight:4}, p:{color:'#E0562F',weight:3}, s:{color:'#8C6B2E',weight:1.8}, r:{color:'#A79C86',weight:1.2} };
@@ -251,6 +342,61 @@ ORDER.forEach(code=>{ const b=document.createElement('button'); b.className='chi
   b.onclick=()=>{ active.has(code)?active.delete(code):active.add(code); render(); fitActive(); }; chips.appendChild(b); });
 const qn=document.createElement('button'); qn.className='qb'; qn.textContent='ล้าง'; qn.onclick=()=>{active=new Set();render();}; chips.appendChild(qn);
 
+// ---- warehouses (markers + settings in drawer) ----
+const whLayer = L.layerGroup().addTo(map);
+function whMarkers(){ whLayer.clearLayers();
+  WH.forEach(w=>{ const m=L.marker([w.lat,w.lng],{pane:'lbl',interactive:true,icon:L.divIcon({className:'wh'+(w.id===whId?' sel':''),html:w.name,iconSize:null,iconAnchor:[0,10]})});
+    m.on('click',()=>{ if(picking) return; if(measure.on){ addPoint({type:'wh',id:w.id,name:w.name,ll:[w.lat,w.lng]}); return; } whId=w.id; save(); whMarkers(); showDist(); });
+    whLayer.addLayer(m); }); }
+map.getPane('lbl').style.pointerEvents='';   // warehouse markers must be clickable; labels keep pointer-events:none via CSS
+const whs=document.getElementById('whs');
+document.getElementById('whtoggle').onclick=()=>{ whs.classList.toggle('show'); renderWH(); };
+function renderWH(){ document.getElementById('whlist').innerHTML = WH.map(w=>`<div class="it"><span>🏭 ${w.name}</span><span class="c">${w.lat.toFixed(5)}, ${w.lng.toFixed(5)}</span><button class="del" data-id="${w.id}" title="ลบ">🗑</button></div>`).join('');
+  whs.querySelectorAll('.del').forEach(b=>b.onclick=()=>{ if(WH.length<=1){ whErr('ต้องมีโกดังอย่างน้อย 1 แห่ง'); return; } if(!confirm('ลบโกดังนี้?')) return;
+    WH=WH.filter(w=>w.id!==b.dataset.id); if(whId===b.dataset.id) whId=WH[0].id; saveWH(); save(); renderWH(); whMarkers(); showDist(); }); }
+function whErr(t){ document.getElementById('wherr').textContent=t||''; }
+function parseLL(s){ s=s.trim(); let m;
+  if((m=/@(-?\d+\.\d+),(-?\d+\.\d+)/.exec(s))||(m=/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/.exec(s))||(m=/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/.exec(s))||(m=/^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/.exec(s))) return [+m[1],+m[2]];
+  return null; }
+document.getElementById('whform').onsubmit=e=>{ e.preventDefault(); const name=document.getElementById('whname').value.trim(), ll=parseLL(document.getElementById('whll').value);
+  if(!name){ whErr('ใส่ชื่อโกดัง'); return; } if(!ll||ll[0]<5||ll[0]>21||ll[1]<97||ll[1]>106){ whErr('อ่านพิกัดไม่ได้ — ใช้ลิงก์ Google Maps แบบเต็ม (ที่มี @lat,lng) หรือพิมพ์ lat,lng หรือกด 📍 แตะบนแผนที่'); return; }
+  WH.push({id:'w'+Date.now().toString(36), name, lat:ll[0], lng:ll[1]}); saveWH(); whErr(''); e.target.reset(); renderWH(); whMarkers(); showDist(); };
+document.getElementById('whreset').onclick=()=>{ if(!confirm('คืนรายชื่อโกดังเป็นค่าเริ่มต้น?')) return; WH=WH_DEFAULT.map(w=>({...w})); whId=WH[0].id; saveWH(); save(); renderWH(); whMarkers(); showDist(); };
+let picking=false;
+document.getElementById('whpick').onclick=()=>{ picking=true; document.body.classList.add('picking'); setDrawer(false); };
+map.on('click',e=>{ if(!picking) return; picking=false; document.body.classList.remove('picking');
+  document.getElementById('whll').value=e.latlng.lat.toFixed(5)+', '+e.latlng.lng.toFixed(5); setDrawer(true); whs.classList.add('show'); renderWH(); document.getElementById('whname').focus(); });
+
+// ---- measure mode: chain of points, road distance per leg via OSRM ----
+map.createPane('route'); map.getPane('route').style.zIndex=470; map.getPane('route').style.pointerEvents='none';   // its canvas must not swallow district clicks
+map.getPane('provl').style.pointerEvents='none';
+const measure={on:false, pts:[], legs:[]};
+const mLayer=L.layerGroup().addTo(map), mp=document.getElementById('mp'), mbtn=document.getElementById('mbtn');
+const dPoint=code=>{ const f=layerByCode[code].feature.properties; return {type:'d', id:code, name:'อ.'+f.th, ll:CENTERS[code]}; };
+function setMeasure(on){ measure.on=on; mbtn.classList.toggle('on',on); mp.classList.toggle('show',on);
+  if(on){ if(selected) select(selected,false); document.getElementById('info').classList.remove('show'); } else { measure.pts=[]; measure.legs=[]; mLayer.clearLayers(); }
+  renderMeasure(); }
+mbtn.onclick=()=>setMeasure(!measure.on);
+document.getElementById('mclose').onclick=()=>setMeasure(false);
+document.getElementById('mclear').onclick=()=>{ measure.pts=[]; measure.legs=[]; mLayer.clearLayers(); renderMeasure(); };
+document.getElementById('mundo').onclick=()=>{ measure.pts.pop(); measure.legs.pop(); renderMeasure(); drawMeasure(); };
+function addPoint(p){ const last=measure.pts[measure.pts.length-1]; if(last && last.type===p.type && last.id===p.id) return;
+  measure.pts.push(p); if(measure.pts.length>1){ const leg={pending:true}; measure.legs.push(leg); const i=measure.legs.length-1;
+    route(last.ll,p.ll).then(r=>{ if(measure.legs[i]!==leg) return; Object.assign(leg,r,{pending:false}); renderMeasure(); drawMeasure(); }); }
+  renderMeasure(); drawMeasure(); }
+function drawMeasure(){ mLayer.clearLayers();
+  measure.legs.forEach(l=>{ if(l.pending) return; const g=l.g;
+    mLayer.addLayer(L.polyline(g,{pane:'route',color:'#fff',weight:8,opacity:.9,interactive:false}));
+    mLayer.addLayer(L.polyline(g,{pane:'route',color:'#1D4ED8',weight:4.5,opacity:1,dashArray:l.approx?'8 8':null,interactive:false})); });
+  measure.pts.forEach((p,i)=>mLayer.addLayer(L.marker(p.ll,{pane:'lbl',interactive:false,icon:L.divIcon({className:'pt',html:i+1,iconSize:[18,18],iconAnchor:[9,9]})}))); }
+function renderMeasure(){ const ol=document.getElementById('mlist'); let tot=0, totMin=0, approx=false, pend=false;
+  ol.innerHTML=measure.pts.map((p,i)=>{ const l=measure.legs[i-1]; let leg='';
+    if(l){ if(l.pending){ leg='<span class="leg">…</span>'; pend=true; } else { tot+=l.km; totMin+=l.min; approx=approx||l.approx; leg=`<span class="leg"><b>${fmtKm(l.km)}</b> · ${fmtMin(l.min)}${l.approx?' ≈':''}</span>`; } }
+    return `<li><span class="n">${i+1}</span><span class="nm">${p.type==='wh'?'🏭 ':''}${p.name}</span>${leg}</li>`; }).join('');
+  document.getElementById('mhint').style.display = measure.pts.length? 'none':'';
+  const t=document.getElementById('mtot'); t.style.display = measure.legs.length? 'flex':'none';
+  document.getElementById('mtotv').textContent = pend? '…' : fmtKm(tot)+' · '+fmtMin(totMin)+(approx?' (≈ บางช่วงประมาณ)':''); }
+
 // ---- search ----
 const q=document.getElementById('q'), sug=document.getElementById('sug'); let hi=-1, hits=[];
 function norm(s){ return s.toLowerCase().replace(/^อ\.?\s*/,'').replace(/^อำเภอ\s*/,''); }
@@ -258,12 +404,13 @@ q.oninput=()=>{ const v=norm(q.value.trim()); hi=-1; if(!v){ sug.hidden=true; re
   hits=DATA.features.filter(f=>f.properties.th.includes(v)||f.properties.en.toLowerCase().includes(v)).slice(0,8);
   sug.innerHTML=hits.map((f,i)=>`<li data-i="${i}">อ.${f.properties.th}<small>จ.${PROV[f.properties.p]}</small></li>`).join(''); sug.hidden=!hits.length;
   sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{ e.preventDefault(); pick(hits[+li.dataset.i]); }); };
-function pick(f){ q.value='อ.'+f.properties.th; sug.hidden=true; q.blur(); if(!active.has(f.properties.p)){ active.add(f.properties.p); render(); } setDrawer(false); select(f.properties.c,true); }
+function pick(f){ q.value='อ.'+f.properties.th; sug.hidden=true; q.blur(); if(!active.has(f.properties.p)){ active.add(f.properties.p); render(); } setDrawer(false);
+  if(measure.on){ addPoint(dPoint(f.properties.c)); map.panTo(CENTERS[f.properties.c]); q.value=''; } else select(f.properties.c,true); }
 q.onkeydown=e=>{ if(sug.hidden) return; if(e.key==='ArrowDown'){hi=Math.min(hi+1,hits.length-1);} else if(e.key==='ArrowUp'){hi=Math.max(hi-1,0);} else if(e.key==='Enter'){ if(hits[hi<0?0:hi]) pick(hits[hi<0?0:hi]); return; } else if(e.key==='Escape'){ sug.hidden=true; return; } else return;
   e.preventDefault(); sug.querySelectorAll('li').forEach((li,i)=>li.classList.toggle('hi',i===hi)); };
 q.onblur=()=>setTimeout(()=>sug.hidden=true,150);
 
-geo.addTo(map); provLayer.addTo(map); dLabels.addTo(map); pLabels.addTo(map); render(); updateRoads(); fitActive();
+geo.addTo(map); provLayer.addTo(map); dLabels.addTo(map); pLabels.addTo(map); render(); updateRoads(); fitActive(); whMarkers();
 </script>
 </body>
 </html>

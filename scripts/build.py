@@ -9,6 +9,7 @@ css = re.sub(r'/\*.*?\*/', '', (ROOT/'src/leaflet.css').read_text(encoding='utf-
 html = (tpl.replace('__LEAFLET_CSS__', css)
            .replace('__DATA__',  (ROOT/'data/districts.json').read_text(encoding='utf-8'))
            .replace('__PROV__',  (ROOT/'data/provinces.json').read_text(encoding='utf-8'))
-           .replace('__ROADS__', (ROOT/'data/roads.json').read_text(encoding='utf-8')))
+           .replace('__ROADS__', (ROOT/'data/roads.json').read_text(encoding='utf-8'))
+           .replace('__CENTERS__', (ROOT/'data/centers.json').read_text(encoding='utf-8')))
 (ROOT/'index.html').write_text(html, encoding='utf-8')
 print('index.html', len(html.encode()), 'bytes')

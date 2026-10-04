@@ -10,6 +10,7 @@ const html = read('src/index.template.html')
   .replace('__LEAFLET_CSS__', () => css)
   .replace('__DATA__',  () => read('data/districts.json'))
   .replace('__PROV__',  () => read('data/provinces.json'))
-  .replace('__ROADS__', () => read('data/roads.json'));
+  .replace('__ROADS__', () => read('data/roads.json'))
+  .replace('__CENTERS__', () => read('data/centers.json'));
 fs.writeFileSync(path.join(ROOT, 'index.html'), html);
 console.log('index.html', Buffer.byteLength(html), 'bytes');
